@@ -1,5 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { ArrowLeft, Brain, ScanSearch } from "lucide-react";
+import { ArrowLeft, Brain, History, ScanSearch } from "lucide-react";
 
 export const Route = createFileRoute("/analysis/")({
   head: () => ({
@@ -68,6 +68,19 @@ function AnalyserPicker() {
             <span className="text-xs text-muted-foreground">
               Every candle checked against 13 structure strategies with PASS/FAIL reasons, RR math,
               a ranked setup list and the verifier stage.
+            </span>
+          </Link>
+          <Link
+            to="/backtest"
+            className="glass-card flex flex-col gap-3 rounded-xl p-6 transition-colors hover:border-primary/40"
+          >
+            <span className="flex size-10 items-center justify-center rounded-lg bg-primary/15 text-primary">
+              <History size={18} />
+            </span>
+            <span className="text-lg font-semibold text-foreground">Auto-Backtester</span>
+            <span className="text-xs text-muted-foreground">
+              Walks a date range one day at a time, pulls a month of 30M candles per day, runs the
+              structure engine locally (no AI) and downloads a dated report with rolling win rates.
             </span>
           </Link>
         </div>
