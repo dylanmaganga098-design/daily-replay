@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AnalysisRouteImport } from './routes/analysis'
+import { Route as BacktestRouteImport } from './routes/backtest'
 import { Route as AnalysisIndexRouteImport } from './routes/analysis.index'
 import { Route as AnalysisV1RouteImport } from './routes/analysis.v1'
 import { Route as AnalysisV2RouteImport } from './routes/analysis.v2'
@@ -24,6 +25,11 @@ const IndexRoute = IndexRouteImport.update({
 const AnalysisRoute = AnalysisRouteImport.update({
   id: '/analysis',
   path: '/analysis',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const BacktestRoute = BacktestRouteImport.update({
+  id: '/backtest',
+  path: '/backtest',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AnalysisIndexRoute = AnalysisIndexRouteImport.update({
@@ -50,6 +56,7 @@ const ApiAnalysisRoute = ApiAnalysisRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/analysis': typeof AnalysisRouteWithChildren
+  '/backtest': typeof BacktestRoute
   '/analysis/v1': typeof AnalysisV1Route
   '/analysis/v2': typeof AnalysisV2Route
   '/api/analysis': typeof ApiAnalysisRoute
@@ -57,6 +64,7 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/backtest': typeof BacktestRoute
   '/analysis/v1': typeof AnalysisV1Route
   '/analysis/v2': typeof AnalysisV2Route
   '/api/analysis': typeof ApiAnalysisRoute
@@ -66,6 +74,7 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/analysis': typeof AnalysisRouteWithChildren
+  '/backtest': typeof BacktestRoute
   '/analysis/v1': typeof AnalysisV1Route
   '/analysis/v2': typeof AnalysisV2Route
   '/api/analysis': typeof ApiAnalysisRoute
@@ -76,16 +85,24 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/analysis'
+    | '/backtest'
     | '/analysis/v1'
     | '/analysis/v2'
     | '/api/analysis'
     | '/analysis/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/analysis/v1' | '/analysis/v2' | '/api/analysis' | '/analysis'
+  to:
+    | '/'
+    | '/backtest'
+    | '/analysis/v1'
+    | '/analysis/v2'
+    | '/api/analysis'
+    | '/analysis'
   id:
     | '__root__'
     | '/'
     | '/analysis'
+    | '/backtest'
     | '/analysis/v1'
     | '/analysis/v2'
     | '/api/analysis'
@@ -95,6 +112,7 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AnalysisRoute: typeof AnalysisRouteWithChildren
+  BacktestRoute: typeof BacktestRoute
   ApiAnalysisRoute: typeof ApiAnalysisRoute
 }
 
@@ -112,6 +130,13 @@ declare module '@tanstack/react-router' {
       path: '/analysis'
       fullPath: '/analysis'
       preLoaderRoute: typeof AnalysisRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/backtest': {
+      id: '/backtest'
+      path: '/backtest'
+      fullPath: '/backtest'
+      preLoaderRoute: typeof BacktestRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/analysis/': {
@@ -164,6 +189,7 @@ const AnalysisRouteWithChildren = AnalysisRoute._addFileChildren(
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AnalysisRoute: AnalysisRouteWithChildren,
+  BacktestRoute: BacktestRoute,
   ApiAnalysisRoute: ApiAnalysisRoute,
 }
 export const routeTree = rootRouteImport

@@ -26,6 +26,7 @@ import {
   AlertCircle,
   Search,
   Brain,
+  History,
 } from "lucide-react";
 import {
   Card,
@@ -1164,6 +1165,12 @@ export default function Home() {
               className="flex items-center gap-1.5 mr-3 rounded-lg border border-primary/30 bg-primary/10 px-3 py-1.5 text-[11px] font-bold text-primary hover:bg-primary/20 transition-colors"
             >
               <Brain size={12} /> Analysis
+            </Link>
+            <Link
+              to="/backtest"
+              className="flex items-center gap-1.5 mr-3 rounded-lg border border-primary/30 bg-primary/10 px-3 py-1.5 text-[11px] font-bold text-primary hover:bg-primary/20 transition-colors"
+            >
+              <History size={12} /> Backtest
             </Link>
             <span className="flex items-center gap-1.5 text-[11px] text-white/40 font-mono">
               <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse inline-block" />
