@@ -31,8 +31,8 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-import { STRATEGIES } from "@/lib/analyzer/strategies";
 } from "@/components/ui/select";
+import { STRATEGIES } from "@/lib/analyzer/strategies";
 import { AVAILABLE_SYMBOLS, TWELVE_DATA_API_KEYS } from "@/lib/market-data";
 import { buildOhlcCsv } from "@/lib/ohlc-generator";
 import {
@@ -457,7 +457,7 @@ export default function Backtest() {
               <div>
                 <CardTitle className="text-base">Run log</CardTitle>
                 <CardDescription className="text-xs">
-                  Every day writes backtest_YYYY-MM-DD.txt and downloads automatically.
+                  One backtest_YYYY-MM-DD.txt per day, delivered as a single ZIP at the end.
                 </CardDescription>
               </div>
               <Activity size={16} className="text-muted-foreground" />
