@@ -1146,32 +1146,24 @@ export default function Home() {
       {/* ═══ HEADER ═══ */}
       <header className="sticky top-0 z-50 border-b border-white/5 bg-black/95 backdrop-blur-xl">
         <div className="container mx-auto px-6 h-14 flex items-center justify-between max-w-7xl">
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2">
             <div className="w-8 h-8 rounded bg-primary flex items-center justify-center">
               <LineChart size={16} strokeWidth={2.5} className="text-white" />
             </div>
-            <div className="flex items-baseline gap-2.5">
-              <span className="text-base font-black tracking-tight text-white">
-                ForexLens
-              </span>
-              <span className="text-[10px] font-mono text-white/30 tracking-[0.2em] uppercase">
-                Pro
-              </span>
-            </div>
-          </div>
-          <div className="flex items-center gap-2">
             <Link
               to="/analysis"
-              className="flex items-center gap-1.5 mr-3 rounded-lg border border-primary/30 bg-primary/10 px-3 py-1.5 text-[11px] font-bold text-primary hover:bg-primary/20 transition-colors"
+              className="flex items-center gap-1.5 rounded-lg border border-primary/30 bg-primary/10 px-3 py-1.5 text-[11px] font-bold text-primary hover:bg-primary/20 transition-colors"
             >
               <Brain size={12} /> Analysis
             </Link>
             <Link
               to="/backtest"
-              className="flex items-center gap-1.5 mr-3 rounded-lg border border-primary/30 bg-primary/10 px-3 py-1.5 text-[11px] font-bold text-primary hover:bg-primary/20 transition-colors"
+              className="flex items-center gap-1.5 rounded-lg border border-primary/30 bg-primary/10 px-3 py-1.5 text-[11px] font-bold text-primary hover:bg-primary/20 transition-colors"
             >
               <History size={12} /> Backtest
             </Link>
+          </div>
+          <div className="flex items-center gap-2">
             <span className="flex items-center gap-1.5 text-[11px] text-white/40 font-mono">
               <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse inline-block" />
               Live

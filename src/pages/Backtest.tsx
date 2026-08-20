@@ -5,6 +5,7 @@ import JSZip from "jszip";
 import {
   Activity,
   ArrowLeft,
+  Brain,
   Download,
   History,
   Loader2,
@@ -32,8 +33,9 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { STRATEGIES } from "@/lib/analyzer/strategies";
 import { AVAILABLE_SYMBOLS, TWELVE_DATA_API_KEYS } from "@/lib/market-data";
-import { buildOhlcCsv, cooldown } from "@/lib/ohlc-generator";
+import { buildOhlcCsv } from "@/lib/ohlc-generator";
 import {
   analyseDay,
   applyTriggers,
@@ -81,7 +83,7 @@ export default function Backtest() {
   );
   const [toDate, setToDate] = useState(format(new Date(), "yyyy-MM-dd"));
   const [checkpoint, setCheckpoint] = useState("11:45");
-  const [pauseSeconds, setPauseSeconds] = useState(15);
+  
 
   const [isRunning, setIsRunning] = useState(false);
   const [cooldownSeconds, setCooldownSeconds] = useState<number | null>(null);
@@ -236,17 +238,9 @@ export default function Backtest() {
         lastRowDatetime,
       });
       const fileName = dayFileName(day);
-      downloadBlob(new Blob([report], { type: "text/plain;charset=utf-8" }), fileName);
+      // Files are collected only — the whole run downloads once, as a single ZIP.
       collected.push({ name: fileName, content: report });
       setDayFiles((prev) => [{ name: fileName, content: report }, ...prev]);
-
-      // Explicit pacing: never fire the next day's pull back-to-back. Uses the
-      // same per-second cooldown/replenishment timer as the generator.
-      const isLast = i === queue.length - 1;
-      if (!isLast && !stopRef.current && pauseSeconds > 0) {
-        addLog(`⏳ Cooling down ${pauseSeconds}s before the next day...`);
-        await cooldown(pauseSeconds, setCooldownSeconds);
-      }
     }
 
     setCurrentDay(null);
@@ -282,8 +276,14 @@ export default function Backtest() {
           </div>
           <div className="flex items-center gap-2">
             <Link
-              to="/"
+              to="/analysis"
               className="flex items-center gap-1.5 rounded-lg border border-primary/30 bg-primary/10 px-3 py-1.5 text-[11px] font-bold text-primary transition-colors hover:bg-primary/20"
+            >
+              <Brain size={12} /> Analysis
+            </Link>
+            <Link
+              to="/"
+              className="flex items-center gap-1.5 rounded-lg border border-border/60 px-3 py-1.5 text-[11px] font-bold text-muted-foreground transition-colors hover:text-foreground"
             >
               <ArrowLeft size={12} /> Data fetcher
             </Link>
@@ -301,8 +301,9 @@ export default function Backtest() {
           <CardHeader>
             <CardTitle className="text-base">Run settings</CardTitle>
             <CardDescription className="text-xs">
-              One month of 30M candles per day, analysed locally by the structure engine — no AI
-              call. The window advances one day at a time; weekends are skipped automatically.
+              One month of 30M candles per day, checked against your {STRATEGIES.length} saved
+              strategies locally — no AI call. The window advances one day at a time with no pause;
+              weekends are skipped automatically.
             </CardDescription>
           </CardHeader>
           <CardContent className="flex flex-col gap-4">
@@ -363,18 +364,10 @@ export default function Backtest() {
                 />
               </div>
               <div className="flex flex-col gap-1.5">
-                <Label htmlFor="pause" className="text-[11px] uppercase tracking-wide">
-                  Pause between days (s)
-                </Label>
-                <Input
-                  id="pause"
-                  type="number"
-                  min={0}
-                  max={600}
-                  value={pauseSeconds}
-                  disabled={isRunning}
-                  onChange={(event) => setPauseSeconds(Number(event.target.value) || 0)}
-                />
+                <Label className="text-[11px] uppercase tracking-wide">Strategies</Label>
+                <div className="flex h-9 items-center rounded-md border border-border/60 bg-muted/30 px-3 font-mono text-xs text-muted-foreground">
+                  {STRATEGIES.length} saved strategies
+                </div>
               </div>
             </div>
 
@@ -472,7 +465,7 @@ export default function Backtest() {
               <div>
                 <CardTitle className="text-base">Run log</CardTitle>
                 <CardDescription className="text-xs">
-                  Every day writes backtest_YYYY-MM-DD.txt and downloads automatically.
+                  One backtest_YYYY-MM-DD.txt per day, delivered as a single ZIP at the end.
                 </CardDescription>
               </div>
               <Activity size={16} className="text-muted-foreground" />
