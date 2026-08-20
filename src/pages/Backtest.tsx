@@ -275,8 +275,14 @@ export default function Backtest() {
           </div>
           <div className="flex items-center gap-2">
             <Link
-              to="/"
+              to="/analysis"
               className="flex items-center gap-1.5 rounded-lg border border-primary/30 bg-primary/10 px-3 py-1.5 text-[11px] font-bold text-primary transition-colors hover:bg-primary/20"
+            >
+              <Brain size={12} /> Analysis
+            </Link>
+            <Link
+              to="/"
+              className="flex items-center gap-1.5 rounded-lg border border-border/60 px-3 py-1.5 text-[11px] font-bold text-muted-foreground transition-colors hover:text-foreground"
             >
               <ArrowLeft size={12} /> Data fetcher
             </Link>
@@ -294,8 +300,9 @@ export default function Backtest() {
           <CardHeader>
             <CardTitle className="text-base">Run settings</CardTitle>
             <CardDescription className="text-xs">
-              One month of 30M candles per day, analysed locally by the structure engine — no AI
-              call. The window advances one day at a time; weekends are skipped automatically.
+              One month of 30M candles per day, checked against your {STRATEGIES.length} saved
+              strategies locally — no AI call. The window advances one day at a time with no pause;
+              weekends are skipped automatically.
             </CardDescription>
           </CardHeader>
           <CardContent className="flex flex-col gap-4">
