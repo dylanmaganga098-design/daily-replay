@@ -31,6 +31,7 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
+import { STRATEGIES } from "@/lib/analyzer/strategies";
 } from "@/components/ui/select";
 import { AVAILABLE_SYMBOLS, TWELVE_DATA_API_KEYS } from "@/lib/market-data";
 import { buildOhlcCsv } from "@/lib/ohlc-generator";
