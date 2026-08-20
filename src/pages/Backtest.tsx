@@ -33,7 +33,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { AVAILABLE_SYMBOLS, TWELVE_DATA_API_KEYS } from "@/lib/market-data";
-import { buildOhlcCsv, cooldown } from "@/lib/ohlc-generator";
+import { buildOhlcCsv } from "@/lib/ohlc-generator";
 import {
   analyseDay,
   applyTriggers,
@@ -81,7 +81,7 @@ export default function Backtest() {
   );
   const [toDate, setToDate] = useState(format(new Date(), "yyyy-MM-dd"));
   const [checkpoint, setCheckpoint] = useState("11:45");
-  const [pauseSeconds, setPauseSeconds] = useState(15);
+  
 
   const [isRunning, setIsRunning] = useState(false);
   const [cooldownSeconds, setCooldownSeconds] = useState<number | null>(null);
@@ -236,17 +236,9 @@ export default function Backtest() {
         lastRowDatetime,
       });
       const fileName = dayFileName(day);
-      downloadBlob(new Blob([report], { type: "text/plain;charset=utf-8" }), fileName);
+      // Files are collected only — the whole run downloads once, as a single ZIP.
       collected.push({ name: fileName, content: report });
       setDayFiles((prev) => [{ name: fileName, content: report }, ...prev]);
-
-      // Explicit pacing: never fire the next day's pull back-to-back. Uses the
-      // same per-second cooldown/replenishment timer as the generator.
-      const isLast = i === queue.length - 1;
-      if (!isLast && !stopRef.current && pauseSeconds > 0) {
-        addLog(`⏳ Cooling down ${pauseSeconds}s before the next day...`);
-        await cooldown(pauseSeconds, setCooldownSeconds);
-      }
     }
 
     setCurrentDay(null);
@@ -363,18 +355,10 @@ export default function Backtest() {
                 />
               </div>
               <div className="flex flex-col gap-1.5">
-                <Label htmlFor="pause" className="text-[11px] uppercase tracking-wide">
-                  Pause between days (s)
-                </Label>
-                <Input
-                  id="pause"
-                  type="number"
-                  min={0}
-                  max={600}
-                  value={pauseSeconds}
-                  disabled={isRunning}
-                  onChange={(event) => setPauseSeconds(Number(event.target.value) || 0)}
-                />
+                <Label className="text-[11px] uppercase tracking-wide">Strategies</Label>
+                <div className="flex h-9 items-center rounded-md border border-border/60 bg-muted/30 px-3 font-mono text-xs text-muted-foreground">
+                  {STRATEGIES.length} saved strategies
+                </div>
               </div>
             </div>
 
