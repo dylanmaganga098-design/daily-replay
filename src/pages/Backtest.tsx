@@ -5,6 +5,7 @@ import JSZip from "jszip";
 import {
   Activity,
   ArrowLeft,
+  Brain,
   Download,
   History,
   Loader2,
